@@ -649,31 +649,72 @@
                 
                 <div class="contact-grid">
                     <div class="contact-form fade-in delay-2">
-                        <form>
+                        <form action="https://docs.google.com/forms/d/e/1FAIpQLSeWUvEXRFUccj2j1sQn1awwlmsUUhqDDB1zz5np-nAjRcp5TA/formResponse" method="POST" id="contactForm" target="_blank">
                             <div class="form-group">
-                                <label for="name" class="form-label">Name</label>
-                                <input type="text" id="name" name="name" class="form-input" required>
+                                <label for="name" class="form-label">Full Name</label>
+                                <input type="text" 
+                                       id="name" 
+                                       name="entry.896916683" 
+                                       class="form-input" 
+                                       required
+                                       minlength="3"
+                                       placeholder="Enter your full name">
                             </div>
                             
                             <div class="form-group">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" id="email" name="email" class="form-input" required>
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="tel" 
+                                       id="phone" 
+                                       name="entry.434683181" 
+                                       class="form-input" 
+                                       required
+                                       pattern="^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$"
+                                       title="Please enter a valid Indian phone number"
+                                       placeholder="e.g., +91 9876543210">
                             </div>
-                            
+
                             <div class="form-group">
-                                <label for="subject" class="form-label">Subject</label>
-                                <input type="text" id="subject" name="subject" class="form-input" required>
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" 
+                                       id="email" 
+                                       name="entry.1599540956" 
+                                       class="form-input" 
+                                       required
+                                       pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                                       placeholder="Enter your email address">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="location" class="form-label">Location in Bangalore</label>
+                                <input type="text" 
+                                       id="location" 
+                                       name="entry.110815145" 
+                                       class="form-input" 
+                                       required
+                                       placeholder="Enter your location in Bangalore">
                             </div>
                             
                             <div class="form-group">
                                 <label for="message" class="form-label">Message</label>
-                                <textarea id="message" name="message" class="form-textarea" required></textarea>
+                                <textarea id="message" 
+                                          name="entry.1779255378" 
+                                          class="form-textarea" 
+                                          required
+                                          minlength="10"
+                                          placeholder="Type your message here"></textarea>
                             </div>
                             
                             <button type="submit" class="submit-btn">
-                                <i class="fas fa-paper-plane"></i>
-                                Send Message
+                                <span class="btn-text">
+                                    <i class="fas fa-paper-plane"></i>
+                                    Send Message
+                                </span>
+                                <span class="btn-loading" style="display: none;">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                    Sending...
+                                </span>
                             </button>
+                            <div id="contactMessage" style="margin-top: 1rem; text-align: center; display: none;"></div>
                         </form>
                     </div>
                     
@@ -967,6 +1008,62 @@
         });
 
         // Contact card hover effects are handled by CSS
+
+        // Contact form handling with Google Forms
+        var form = document.getElementById("contactForm");
+        
+        function handleSubmit(event) {
+            event.preventDefault();
+            var status = document.getElementById("contactMessage");
+            var button = form.querySelector('.submit-btn');
+            var btnText = button.querySelector('.btn-text');
+            var btnLoading = button.querySelector('.btn-loading');
+
+            // Show loading state
+            btnText.style.display = 'none';
+            btnLoading.style.display = 'inline-block';
+            button.disabled = true;
+            
+            // Submit the form using iframe
+            const formData = new FormData(form);
+            const queryString = new URLSearchParams(formData).toString();
+            const submissionUrl = `${form.action}?${queryString}`;
+            
+            // Create a hidden iframe
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+            
+            // Handle submission completion
+            iframe.onload = function() {
+                // Show success message
+                status.innerHTML = "Thank you for your message! We'll get back to you soon.";
+                status.style.color = 'var(--accent)';
+                status.style.display = 'block';
+                
+                // Reset form and button
+                form.reset();
+                btnText.style.display = 'inline-block';
+                btnLoading.style.display = 'none';
+                button.disabled = false;
+                
+                // Remove iframe
+                setTimeout(() => {
+                    document.body.removeChild(iframe);
+                }, 1000);
+                
+                // Hide status message after 5 seconds
+                setTimeout(() => {
+                    status.style.display = 'none';
+                }, 5000);
+            };
+            
+            // Submit the form
+            iframe.src = submissionUrl;
+        }
+        
+        // Add form event listener
+        form.addEventListener("submit", handleSubmit);
     </script>
 </body>
 </html>

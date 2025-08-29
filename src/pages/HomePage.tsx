@@ -27,21 +27,22 @@ const HomePage: React.FC = () => {
     <Box
       ref={containerRef}
       sx={{
-        minHeight: '100vh',
+        minHeight: '70vh',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         position: 'relative',
         overflow: 'hidden',
+        py: 4,
       }}
     >
       <Container maxWidth="lg">
         <Box
           sx={{
             textAlign: 'center',
-            maxWidth: '800px',
+            maxWidth: '700px',
             mx: 'auto',
-            px: 3,
+            px: 2,
           }}
         >
           <motion.div
@@ -53,20 +54,19 @@ const HomePage: React.FC = () => {
               variant="h1"
               className="fade-in"
               sx={{
-                mb: 3,
+                mb: 2,
                 background: 'linear-gradient(135deg, #8A4FFF 0%, #F5B851 100%)',
                 backgroundClip: 'text',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 fontWeight: 700,
+                fontSize: '3.5rem',
                 '@media (max-width: 768px)': {
-                  fontSize: '2.5rem',
+                  fontSize: '2.25rem',
                 },
               }}
             >
-              Beyond Just Sharing Space
-              <br />
-              Building Life Connections
+              Find Your Pod. Safely.
             </Typography>
           </motion.div>
 
@@ -79,18 +79,17 @@ const HomePage: React.FC = () => {
               variant="h4"
               className="fade-in stagger-1"
               sx={{
-                mb: 6,
+                mb: 4,
                 color: 'text.secondary',
                 fontWeight: 400,
-                lineHeight: 1.6,
+                lineHeight: 1.5,
+                fontSize: '1.35rem',
                 '@media (max-width: 768px)': {
-                  fontSize: '1.25rem',
+                  fontSize: '1.1rem',
                 },
               }}
             >
-              Matchpod is a social movement reimagining urban living in Bangalore. 
-              We're transforming the stressful, unsafe roommate search into an 
-              empowering, community-driven experience.
+              AI-powered roommate matching platform that makes coliving safe and stress-free.
             </Typography>
           </motion.div>
 
@@ -132,32 +131,10 @@ const HomePage: React.FC = () => {
                   transition: 'all 0.3s ease',
                 }}
               >
-                Download The App
+                Learn More
               </Button>
               
-              <Button
-                variant="outlined"
-                size="large"
-                className="fade-in stagger-3"
-                sx={{
-                  borderColor: 'secondary.main',
-                  color: 'secondary.main',
-                  px: 4,
-                  py: 2,
-                  fontSize: '1.125rem',
-                  fontWeight: 600,
-                  borderRadius: '12px',
-                  borderWidth: '2px',
-                  '&:hover': {
-                    borderColor: 'secondary.dark',
-                    backgroundColor: 'rgba(245, 184, 81, 0.1)',
-                    transform: 'translateY(-2px)',
-                  },
-                  transition: 'all 0.3s ease',
-                }}
-              >
-                Discover Our Ideology
-              </Button>
+
             </Box>
           </motion.div>
         </Box>
