@@ -2,20 +2,92 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
 
-@media (prefers-color-scheme: dark) {
+
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* MatchPod Palette */
+    /* Midnight (#030f18) */
+    --midnight: 210 80% 5%;
+    /* Sky (#99e0ff) */
+    --sky: 200 100% 80%;
+    /* Electric Violet (#6C63FF) */
+    --violet: 246 100% 70%;
+    /* Neon Aqua (#20E3D2) */
+    --aqua: 173 78% 50%;
+
+    --background: var(--midnight);
+    --foreground: 0 0% 98%;
+
+    --card: 210 60% 8%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 210 60% 8%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: var(--sky);
+    --primary-foreground: var(--midnight);
+
+    --secondary: 210 40% 12%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 210 30% 15%;
+    --muted-foreground: 0 0% 70%;
+
+    --accent: var(--aqua);
+    --accent-foreground: var(--midnight);
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 210 20% 25%;
+    --input: 210 20% 25%;
+    --ring: var(--sky);
+
+    --chart-1: 200 100% 80%;
+    --chart-2: 173 78% 50%;
+    --chart-3: 246 100% 70%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+
+    --radius: 0.75rem
+  }
+  .dark {
+    --background: var(--midnight);
+    --foreground: 0 0% 98%;
+    --card: 210 50% 6%;
+    --card-foreground: 0 0% 98%;
+    --popover: 210 50% 6%;
+    --popover-foreground: 0 0% 98%;
+    --primary: var(--sky);
+    --primary-foreground: var(--midnight);
+    --secondary: 210 30% 10%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 210 25% 12%;
+    --muted-foreground: 0 0% 70%;
+    --accent: var(--aqua);
+    --accent-foreground: var(--midnight);
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 210 15% 20%;
+    --input: 210 15% 20%;
+    --ring: var(--sky);
+    --chart-1: 200 100% 80%;
+    --chart-2: 173 78% 50%;
+    --chart-3: 246 100% 70%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    background-image: radial-gradient(1200px 600px at 80% -10%, hsl(var(--sky) / 0.15), transparent 60%), radial-gradient(1000px 500px at -10% 100%, hsl(var(--aqua) / 0.12), transparent 60%);
+  }
 }
