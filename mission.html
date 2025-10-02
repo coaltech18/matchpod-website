@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Mission - Matchpod</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --background: #0F0F23;
+            --text-primary: #FFFFFF;
+            --text-secondary: #B8C5D6;
+            --primary: #8A4FFF;
+            --primary-hover: #7A3FFF;
+            --accent: #00D4FF;
+            --accent-hover: #00B8E6;
+            --surface: #1A1A2E;
+            --surface-light: #2A2A3E;
+            --border: rgba(255, 255, 255, 0.1);
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        /* Three.js Canvas */
+        #three-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        /* Content Sections */
+        .section-content {
+            position: relative;
+            z-index: 2;
+            background: rgba(15, 15, 35, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 1rem;
+            border: 1px solid var(--border);
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--primary);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        .main {
+            margin-top: 80px;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideInUp 1s ease forwards 0.5s;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.125rem, 3vw, 1.5rem);
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideInUp 1s ease forwards 0.8s;
+        }
+
+        /* Story Section */
+        .story {
+            padding: 8rem 2rem;
+            background: var(--surface);
+            position: relative;
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .story-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .story-text {
+            opacity: 0;
+            transform: translateX(-50px);
+            animation: storyReveal 1.2s ease forwards 0.5s;
+        }
+
+        .story-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+        }
+
+        .story-paragraph {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .story-highlight {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+        }
+
+        .story-image {
+            opacity: 0;
+            transform: translateX(50px);
+            animation: storyReveal 1.2s ease forwards 0.8s;
+        }
+
+        .story-visual {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Promise Section */
+        .promise {
+            padding: 8rem 2rem;
+            background: var(--background);
+            position: relative;
+        }
+
+        .promise-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .promise-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .promise-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 4rem;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .promise-card {
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .promise-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent, rgba(138, 79, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.8s ease;
+        }
+
+        .promise-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .promise-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .promise-text {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            font-style: italic;
+        }
+
+        /* Values Section */
+        .values {
+            padding: 8rem 2rem;
+            background: var(--surface);
+            position: relative;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .value-item {
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .value-item::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transform: scaleX(0);
+            transition: transform 0.6s ease;
+        }
+
+        .value-item:hover::after {
+            transform: scaleX(1);
+        }
+
+        .value-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .value-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .value-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 5rem 2rem;
+            background: var(--background);
+            text-align: center;
+            position: relative;
+        }
+
+        .cta-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .cta-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--accent);
+            border: 2px solid var(--accent);
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent);
+            color: var(--background);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 3rem 2rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-size: 1.125rem;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            line-height: 1.6;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+            padding-top: 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        /* Animations */
+        @keyframes slideInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes storyReveal {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Mission Page Specific Animations */
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(138, 79, 255, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(138, 79, 255, 0.6); }
+        }
+
+        @keyframes textReveal {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .promise-card:hover {
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        .value-item:hover .value-icon {
+            animation: heartBeat 0.6s ease-in-out;
+        }
+
+        /* Mobile Styles */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .nav-container {
+                padding: 0 1rem;
+            }
+
+            .hero {
+                padding: 1rem;
+            }
+
+            .story {
+                padding: 4rem 1rem;
+            }
+
+            .story-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .promise {
+                padding: 4rem 1rem;
+            }
+
+            .values {
+                padding: 4rem 1rem;
+            }
+
+            .cta {
+                padding: 3rem 1rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+
+            .footer {
+                padding: 2rem 1rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="three-container"></div>
+    
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav-container">
+            <a href="index.html" class="logo">Matchpod</a>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="mission.html" class="nav-link active">Our Mission</a></li>
+                <li><a href="how-it-works.html" class="nav-link">How It Works</a></li>
+                <li><a href="features.html" class="nav-link">Features</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content section-content">
+                <h1 class="hero-title">Our Mission</h1>
+                <p class="hero-subtitle">
+                    Building meaningful connections through safe, verified roommate matching in Bangalore
+                </p>
+            </div>
+        </section>
+
+        <!-- Story Section -->
+        <section class="story">
+            <div class="section-container section-content">
+                <div class="story-content">
+                    <div class="story-text">
+                        <h2 class="story-title">Why We Started This Journey</h2>
+                        <p class="story-paragraph">
+                            We know what it feels like to move to a new city, full of dreams and aspirations, 
+                            only to be met with the harsh reality of finding a safe place to call home. 
+                            The stress, the uncertainty, the countless hours spent scrolling through listings 
+                            with no guarantee of safety or compatibility.
+                        </p>
+                        <p class="story-paragraph">
+                            That's why we created <span class="story-highlight">Matchpod</span> - not just as another roommate 
+                            finder, but as a <span class="story-highlight">social movement</span> that reimagines what urban living 
+                            can be. We believe that the right roommate can transform your experience of a city, 
+                            turning a house into a home and strangers into lifelong friends.
+                        </p>
+                        <p class="story-paragraph">
+                            Our journey began with a simple question: <span class="story-highlight">"What if finding a roommate 
+                            could be as much about building connections as it is about finding a place to live?"</span>
+                        </p>
+                    </div>
+                    <div class="story-image">
+                        <div class="story-visual">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Promise Section -->
+        <section class="promise">
+            <div class="promise-content section-content">
+                <h2 class="promise-title">The Matchpod Promise</h2>
+                <p class="promise-subtitle">
+                    Our commitment to building a community based on trust, safety, and meaningful connections
+                </p>
+                
+                <div class="promise-card">
+                    <div class="promise-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <p class="promise-text">
+                        "We promise to create a platform where every connection is built on a foundation of trust. 
+                        Where safety isn't just a feature, but the core of everything we do. Where finding a roommate 
+                        becomes the beginning of a friendship that lasts beyond the lease."
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Values Section -->
+        <section class="values">
+            <div class="section-container section-content">
+                <h2 class="section-title">Our Core Values</h2>
+                <p class="section-subtitle">
+                    The principles that guide everything we do
+                </p>
+                
+                <div class="values-grid">
+                    <div class="value-item">
+                        <div class="value-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3 class="value-title">Safety First</h3>
+                        <p class="value-description">
+                            Every user goes through our comprehensive verification process. Your safety is our top priority.
+                        </p>
+                    </div>
+                    <div class="value-item">
+                        <div class="value-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 class="value-title">Community</h3>
+                        <p class="value-description">
+                            We're building more than a platform - we're creating a community of like-minded individuals.
+                        </p>
+                    </div>
+                    <div class="value-item">
+                        <div class="value-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h3 class="value-title">Empathy</h3>
+                        <p class="value-description">
+                            We understand the challenges of finding a home in a new city. We've been there too.
+                        </p>
+                    </div>
+                    <div class="value-item">
+                        <div class="value-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h3 class="value-title">Innovation</h3>
+                        <p class="value-description">
+                            We continuously improve our platform to make the roommate search experience better for everyone.
+                        </p>
+                    </div>
+                    <div class="value-item">
+                        <div class="value-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h3 class="value-title">Excellence</h3>
+                        <p class="value-description">
+                            We strive for excellence in everything we do, from user experience to customer support.
+                        </p>
+                    </div>
+                    <div class="value-item">
+                        <div class="value-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <h3 class="value-title">Local Focus</h3>
+                        <p class="value-description">
+                            Built by Bangaloreans, for Bangaloreans. We understand the unique pulse of our city.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta">
+            <div class="cta-content section-content">
+                <h2 class="cta-title">Join Our Mission</h2>
+                <p class="cta-subtitle">
+                    Be part of a community that's redefining what it means to find a home in Bangalore
+                </p>
+                <div class="cta-buttons">
+                    <a href="#" class="btn btn-primary">
+                        <i class="fas fa-download"></i>
+                        Download The App
+                    </a>
+                    <a href="contact.html" class="btn btn-secondary">
+                        <i class="fas fa-envelope"></i>
+                        Get In Touch
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Matchpod</h3>
+                <p>Building meaningful connections through safe, verified roommate matching in Bangalore.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <p><a href="about.html">About Us</a></p>
+                <p><a href="mission.html">Our Mission</a></p>
+                <p><a href="how-it-works.html">How It Works</a></p>
+                <p><a href="features.html">Features</a></p>
+                <p><a href="contact.html">Contact</a></p>
+            </div>
+            <div class="footer-section">
+                <h3>Support</h3>
+                <p><a href="#">Help Center</a></p>
+                <p><a href="#">Safety Guidelines</a></p>
+                <p><a href="#">Privacy Policy</a></p>
+                <p><a href="#">Terms of Service</a></p>
+            </div>
+            <div class="footer-section">
+                <h3>Connect</h3>
+                <p><a href="#"><i class="fab fa-twitter"></i> Twitter</a></p>
+                <p><a href="#"><i class="fab fa-instagram"></i> Instagram</a></p>
+                <p><a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a></p>
+                <p><a href="mailto:hello@matchpod.com">hello@matchpod.com</a></p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Matchpod. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Three.js Mission Page Animation - Heartbeat Theme
+        let scene, camera, renderer;
+        let hearts = [];
+        let mouseX = 0, mouseY = 0;
+
+        function init() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setClearColor(0x000000, 0);
+            document.getElementById('three-container').appendChild(renderer.domElement);
+
+            // Create floating hearts
+            createFloatingHearts();
+            
+            // Create connecting lines
+            createConnectingLines();
+
+            camera.position.z = 80;
+
+            // Mouse movement
+            document.addEventListener('mousemove', (event) => {
+                mouseX = (event.clientX / window.innerWidth - 0.5) * 0.5;
+                mouseY = -(event.clientY / window.innerHeight - 0.5) * 0.5;
+            });
+
+            animate();
+        }
+
+        function createFloatingHearts() {
+            // Create heart shapes using custom geometry
+            for (let i = 0; i < 15; i++) {
+                const heartShape = new THREE.Shape();
+                
+                const x = 0, y = 0;
+                heartShape.moveTo(x + 5, y + 5);
+                heartShape.bezierCurveTo(x + 5, y + 5, x + 4, y, x, y);
+                heartShape.bezierCurveTo(x - 6, y, x - 6, y + 7, x - 6, y + 7);
+                heartShape.bezierCurveTo(x - 6, y + 11, x - 3, y + 15.4, x + 5, y + 19);
+                heartShape.bezierCurveTo(x + 12, y + 15.4, x + 16, y + 11, x + 16, y + 7);
+                heartShape.bezierCurveTo(x + 16, y + 7, x + 16, y, x + 10, y);
+                heartShape.bezierCurveTo(x + 7, y, x + 5, y + 5, x + 5, y + 5);
+
+                const geometry = new THREE.ShapeGeometry(heartShape);
+                const material = new THREE.MeshBasicMaterial({ 
+                    color: i % 2 === 0 ? 0x8A4FFF : 0x00D4FF,
+                    transparent: true,
+                    opacity: 0.4,
+                    side: THREE.DoubleSide,
+                    wireframe: true
+                });
+                
+                const heart = new THREE.Mesh(geometry, material);
+                heart.position.set(
+                    (Math.random() - 0.5) * 120,
+                    (Math.random() - 0.5) * 100,
+                    (Math.random() - 0.5) * 60
+                );
+                heart.scale.set(0.8, 0.8, 0.8);
+                heart.rotation.set(
+                    Math.random() * Math.PI,
+                    Math.random() * Math.PI,
+                    Math.random() * Math.PI
+                );
+                
+                scene.add(heart);
+                hearts.push(heart);
+            }
+        }
+
+        function createConnectingLines() {
+            // Create lines connecting nearby hearts
+            for (let i = 0; i < hearts.length; i++) {
+                for (let j = i + 1; j < hearts.length; j++) {
+                    const distance = hearts[i].position.distanceTo(hearts[j].position);
+                    if (distance < 50) {
+                        const lineGeometry = new THREE.BufferGeometry().setFromPoints([
+                            hearts[i].position,
+                            hearts[j].position
+                        ]);
+                        
+                        const lineMaterial = new THREE.LineBasicMaterial({ 
+                            color: j % 2 === 0 ? 0x8A4FFF : 0x00D4FF,
+                            transparent: true,
+                            opacity: 0.25,
+                            linewidth: 2
+                        });
+                        
+                        const line = new THREE.Line(lineGeometry, lineMaterial);
+                        scene.add(line);
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const time = Date.now() * 0.001;
+
+            // Animate hearts with heartbeat effect
+            hearts.forEach((heart, index) => {
+                heart.rotation.x += 0.005;
+                heart.rotation.y += 0.005;
+                heart.position.y += Math.sin(time * 0.5 + index) * 0.1;
+                heart.position.x += Math.cos(time * 0.3 + index) * 0.1;
+                
+                // Keep hearts within bounds
+                if (Math.abs(heart.position.y) > 50) heart.position.y *= 0.95;
+                if (Math.abs(heart.position.x) > 60) heart.position.x *= 0.95;
+                
+                // Heartbeat scale effect
+                const scale = 0.8 + Math.sin(time * 2 + index) * 0.1;
+                heart.scale.set(scale, scale, scale);
+            });
+
+            // Camera movement based on mouse
+            camera.position.x += (mouseX * 20 - camera.position.x) * 0.02;
+            camera.position.y += (mouseY * 20 - camera.position.y) * 0.02;
+            camera.lookAt(scene.position);
+
+            renderer.render(scene, camera);
+        }
+
+        function handleResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        window.addEventListener('resize', handleResize);
+        
+        // Initialize Three.js
+        init();
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'slideInUp 1s ease forwards';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.querySelectorAll('.story-title, .story-paragraph, .story-visual, .promise-title, .promise-subtitle, .promise-card, .value-item, .cta-title, .cta-subtitle, .cta-buttons').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Staggered animation for value items
+        document.querySelectorAll('.value-item').forEach((item, index) => {
+            item.style.animationDelay = `${index * 0.2}s`;
+        });
+
+        // Parallax effect for hero section
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            const rate = scrolled * -0.5;
+            hero.style.transform = `translateY(${rate}px)`;
+        });
+
+        // Story reveal animation
+        const storyObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'storyReveal 1.2s ease forwards';
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.story-text, .story-image').forEach(el => {
+            storyObserver.observe(el);
+        });
+
+        // Promise card interaction
+        document.querySelectorAll('.promise-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Value item interaction
+        document.querySelectorAll('.value-item').forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.03)';
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
